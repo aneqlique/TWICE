@@ -1,6 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Mea+Culpa&family=Poppins&display=swap');
 @import "tailwindcss";
 
+@theme {
 
+  --color-white: #D9D9D9;
+  --color-black: #1D1D1D;
+  --color-gradient: #B5B9BD;
+
+
+}
+
+
+* {
+  font-family: 'Poppins', sans-serif;
+
+}
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
