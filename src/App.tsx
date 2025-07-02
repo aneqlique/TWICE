@@ -1,8 +1,14 @@
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import { useState, useRef , useEffect } from "react";
 
 export default function App() {
 
- 
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
   const [volume, setVolume] = useState(1); 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
