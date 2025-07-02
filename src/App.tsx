@@ -2,13 +2,16 @@ import { useState, useRef , useEffect } from "react";
 
 export default function App() {
 
+ 
   const [volume, setVolume] = useState(1); 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  
+  const [isDark, setIsDark] = useState(true);
 
-
+  const toggleTheme = () => setIsDark(!isDark);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -53,25 +56,43 @@ export default function App() {
       audioRef.current.volume = newVolume;
     }
   };
-  
-
-
-
   return (
+    
     <>
+      {/* document.removeEventListener("mousemove", handleMouseMove); */}
 
-      <body className="bg-(--color-white) scroll-smooth">
+      <body className="bg-(--color-white) scroll-smooth ">
         <main>
-          
-          <div className="bg-[url(/images/darkbg.png)] relative bg-cover bg-center h-screen w-screen flex items-center justify-center">
+
+          <div className=
+            {`relative w-screen h-screen bg-cover bg-center  flex items-center justify-center transition-all duration-500 ease-in-out ${
+              isDark ? "bg-[url('/images/darkbg.png')]" : "bg-[url('/images/lightbg.png')]"
+            }`}
+          >
+              <button
+                onClick={toggleTheme}
+                className="absolute top-4 right-4 p-2 text-sm backdrop-blur-md text-white rounded-lg z-50 ease-in-out cursor-pointer "
+              >
+                <img
+                  src={isDark ? "/images/lightmode.png" : "/images/darkmode.png"}
+                  alt={isDark? "light" : "dark"}
+                  className="w-6 h-6 md:h-12 md:w-12 transition-all duration-400 ease-in-out"
+                />
+              </button>
+
             <audio ref={audioRef} src="/audio/TWICE-DIVE.mp3"/>
             <div className="absolute w-[200px] sm:w-[260px] md:w-[280px] drop-shadow-2xl transition-all duration-400 ease-in-out">
-              <img src="/images/darkphone.png" alt="phone" className="w-full h-full" />
+            
+            
+              <img
+               src={isDark ? "/images/darkphone.png"  : "/images/lightphone.png"}
+               alt="phone" 
+               className="w-full h-full transition-all duration-400 ease-in-out" />
 
               <div className="absolute mt-2 md:mt-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[160px] sm:w-[200px] md:w-[220px] px-4 pt-5 sm:pt-8 pb-2 bg-white/40 backdrop-blur-xl rounded-3xl shadow-lg transition-all duration-400 ease-in-out">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center transition-all duration-400 ease-in-out">
                       <img
-                        src="/images/twice dark.jpg"
+                        src={isDark ? "/images/twice dark.jpg" : "/images/twice light.jpg"}
                         alt="DIVE - TWICE"
                         className="w-28 sm:w-35 md:w-42 rounded-xl mb-2 transition-all duration-400 ease-in-out"
                       />
@@ -108,7 +129,7 @@ export default function App() {
 
 
                       {/* TIME FORMAT */}
-                      <div className="px-2 flex justify-between text-[8px] font-bold text-(--color-black) w-full mb-2">
+                      <div className="px-1/2 flex justify-between text-[8px] font-bold text-(--color-black) tracking-wide w-full mb-2">
                         <span>{formatTime(progress)}</span>
                         <span>{formatTime(duration)}</span>
 
