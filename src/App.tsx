@@ -79,7 +79,7 @@ export default function App() {
               <img
                 src={isDark ? "/images/lightmode.png" : "/images/darkmode.png"}
                 alt={isDark? "light" : "dark"}
-                className="w-6 h-6 md:h-12 md:w-12 transition-all duration-400 ease-in-out"
+                className="w-10 h-10 md:h-12 md:w-12 transition-all duration-400 ease-in-out"
               />
             </button>
 
