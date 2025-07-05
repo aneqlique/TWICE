@@ -1,14 +1,23 @@
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import { useState, useRef , useEffect } from "react";
 
 export default function App() {
+
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
 
   const [volume, setVolume] = useState(1); 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  
+  const [isDark, setIsDark] = useState(true);
 
-
+  const toggleTheme = () => setIsDark(!isDark);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -53,62 +62,75 @@ export default function App() {
       audioRef.current.volume = newVolume;
     }
   };
-  
-
-
-
   return (
     <>
-
-      <body className="bg-(--color-white) scroll-smooth">
+      <body className="bg-(--color-white) scroll-smooth ">
         <main>
-          
-          <div className="bg-[url(/images/darkbg.png)] relative bg-cover bg-center h-screen w-screen flex items-center justify-center">
+
+          <div className=
+            {`relative w-screen h-screen bg-cover bg-center  flex items-center justify-center transition-all duration-500 ease-in-out ${
+              isDark ? "bg-[url('/images/darkbg.png')]" : "bg-[url('/images/lightbg.png')]"
+            }`}
+          >
+            <button
+              onClick={toggleTheme}
+              className="absolute top-4 right-4 p-2 text-sm backdrop-blur-md text-white rounded-lg z-50 ease-in-out cursor-pointer "
+            >
+              <img
+                src={isDark ? "/images/lightmode.png" : "/images/darkmode.png"}
+                alt={isDark? "light" : "dark"}
+                className="w-6 h-6 md:h-12 md:w-12 transition-all duration-400 ease-in-out"
+              />
+            </button>
+
             <audio ref={audioRef} src="/audio/TWICE-DIVE.mp3"/>
             <div className="absolute w-[200px] sm:w-[260px] md:w-[280px] drop-shadow-2xl transition-all duration-400 ease-in-out">
-              <img src="/images/darkphone.png" alt="phone" className="w-full h-full" />
+              <img
+                src={isDark ? "/images/darkphone.png"  : "/images/lightphone.png"}
+                alt="phone" 
+                className="w-full h-full transition-all duration-400 ease-in-out" />
 
               <div className="absolute mt-2 md:mt-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[160px] sm:w-[200px] md:w-[220px] px-4 pt-5 sm:pt-8 pb-2 bg-white/40 backdrop-blur-xl rounded-3xl shadow-lg transition-all duration-400 ease-in-out">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center transition-all duration-400 ease-in-out">
                       <img
-                        src="/images/twice dark.jpg"
+                        src={isDark ? "/images/twice dark.jpg" : "/images/twice light.jpg"}
                         alt="DIVE - TWICE"
                         className="w-28 sm:w-35 md:w-42 rounded-xl mb-2 transition-all duration-400 ease-in-out"
                       />
 
-                      {/* YUNG KANTA */}
+                      {/* SONG */}
                       <div className="text-(--color-black) text-10px md:text-15px font-semibold">DIVE</div>
                       <div className="text-(--color-black) text-sm md:text-sm mb-1">TWICE</div>
 
-                      {/* PROGRESS BAR NG KANTA */}
+                      {/* PROGRESS BAR */}
                       <input
-                      type="range"
-                      min="0"
-                      max={duration}
-                      value={progress}
-                      onChange={handleSeek}
-                      className="w-full h-1 rounded-full appearance-none bg-(--color-gradient) my-2
-                                [&::-webkit-slider-thumb]:appearance-none 
-                                [&::-webkit-slider-thumb]:h-3 
-                                [&::-webkit-slider-thumb]:w-3 
-                                [&::-webkit-slider-thumb]:rounded-full 
-                                [&::-webkit-slider-thumb]:bg-(--color-black) 
-                                [&::-webkit-slider-thumb]:cursor-pointer 
-                                [&::-moz-range-thumb]:appearance-none 
-                                [&::-moz-range-thumb]:h-3 
-                                [&::-moz-range-thumb]:w-3 
-                                [&::-moz-range-thumb]:rounded-full 
-                                [&::-moz-range-thumb]:bg-(--color-black) 
-                                [&::-moz-range-thumb]:cursor-pointer"
-                      style={{
-                      background: `linear-gradient(to right, #1D1D1D ${progress / duration * 100}%, #B5B9BD ${progress / duration * 100}%)`,
-                      }}
-                      step="0.01"
-                       ></input>
+                        type="range"
+                        min="0"
+                        max={duration}
+                        value={progress}
+                        onChange={handleSeek}
+                        className="w-full h-1 rounded-full appearance-none bg-(--color-gradient) my-2
+                                  [&::-webkit-slider-thumb]:appearance-none 
+                                  [&::-webkit-slider-thumb]:h-3 
+                                  [&::-webkit-slider-thumb]:w-3 
+                                  [&::-webkit-slider-thumb]:rounded-full 
+                                  [&::-webkit-slider-thumb]:bg-(--color-black) 
+                                  [&::-webkit-slider-thumb]:cursor-pointer 
+                                  [&::-moz-range-thumb]:appearance-none 
+                                  [&::-moz-range-thumb]:h-3 
+                                  [&::-moz-range-thumb]:w-3 
+                                  [&::-moz-range-thumb]:rounded-full 
+                                  [&::-moz-range-thumb]:bg-(--color-black) 
+                                  [&::-moz-range-thumb]:cursor-pointer"
+                        style={{
+                        background: `linear-gradient(to right, #1D1D1D ${progress / duration * 100}%, #B5B9BD ${progress / duration * 100}%)`,
+                        }}
+                        step="0.01"
+                      ></input>
 
 
                       {/* TIME FORMAT */}
-                      <div className="px-2 flex justify-between text-[8px] font-bold text-(--color-black) w-full mb-2">
+                      <div className="px-1/2 flex justify-between text-[8px] font-bold text-(--color-black) tracking-wide w-full mb-2">
                         <span>{formatTime(progress)}</span>
                         <span>{formatTime(duration)}</span>
 
@@ -124,7 +146,7 @@ export default function App() {
                             className="h-6 w-6 md:h-10 md:w-10 object-cover duration-300"
                             />
                         </button>
-                        {/* PLAY */}
+                        {/* PAUSE PLAY */}
                         <button
                           className="text-white text-xl cursor-pointer transition-all duration-400 ease-in-out "
                           onClick={togglePlay}>
@@ -186,125 +208,46 @@ export default function App() {
                               className="h-5 w-5 md:h-7 md:w-7 ml-1 mr-3 object-cover duration-300"
                               />
                         </button>
-
                       </div>
-
-
-
                 </div>
+               
               </div>
+              
             </div>
-          </div>
-
-          {/* <div className="bg-[url(/images/darkbg.png)] bg-cover bg-center h-screen w-screen flex items-center justify-center">
-            {/ * Phone Wrapper (relative for positioning the widget) * /}
-            <div className="relative w-[200px] sm:w-[260px] md:w-[280px] drop-shadow-2xl transition-all duration-400 ease-in-out">
-              {/ * Phone Image * /}
-              <img src="/images/darkphone.png" alt="phone" className="w-full h-full" />
-
-              {/ * Music Widget (Centered on phone screen)  * /}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[160px] sm:w-[200px] md:w-[220px] px-4 pt-6 pb-2 bg-white/20 backdrop-blur-xl rounded-3xl shadow-lg">
-                <div className="flex flex-col items-center">
+              <div className="relative mb-23 sm:mb-0 mt-100 md:mt-108 flex justify-center gap-4 sm:gap-5 w-full px-4 transition-all duration-400 ease-in-out">
+                <a href="https://www.instagram.com/twicetagram" target="_blank" rel="noopener noreferrer">
                   <img
-                    src="/images/twice dark.jpg"
-                    alt="DIVE - TWICE"
-                    className="w-32 rounded-xl mb-2"
+                    src={isDark ? "/images/igdark.png" : "/images/ig.png" }
+                    alt="back"
+                    className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 cursor-pointer rounded-lg bg-white/60 backdrop-blur-md shadow-md"
                   />
-                  <div className="text-white text-sm font-semibold">DIVE</div>
-                  <div className="text-gray-300 text-xs mb-2">TWICE</div>
-                  <div className="w-full h-1 bg-gray-400 rounded-full overflow-hidden mb-1">
-                    <div className="h-full bg-white w-1/2"></div>
-                  </div>
-                  <div className="flex justify-between text-[10px] text-gray-300 w-full mb-2">
-                    <span>1:38</span>
-                    <span>3:21</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-4">
-                    <button className="text-white">⏮️</button>
-                    <button
-                      className="text-white text-xl"
-                      onClick={() => setPlaying(!playing)}
-                    >
-                      {playing ? "⏸️" : "▶️"}
-                    </button>
-                    <button className="text-white">⏭️</button>
-                  </div>
-                </div>
+                </a>
+
+                <a href="https://youtu.be/QGCkDOkpWf8?si=UImywlR_AshNohLN" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={isDark ? "/images/ytdark.png" : "/images/yt.png" }
+                    alt="back"
+                    className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 cursor-pointer rounded-lg bg-white/60 backdrop-blur-md shadow-md"
+                  />
+                </a>
+
+                <a href="https://open.spotify.com/album/7tgTOUXm74GKA12wsQIUPu?si=4cQU1_QxQFe2n1r9GVM4Cw" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={isDark ? "/images/spdark.png" : "/images/sp.png" }
+                    alt="back"
+                    className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 cursor-pointer rounded-lg bg-white/60 backdrop-blur-md shadow-md"
+                  />
+                </a>
               </div>
-            </div>
-          </div> */}
-
-
+          </div>
         </main>
       </body>
-
-
     </>
   )
+
   function formatTime(seconds: number) {
     const min = Math.floor(seconds / 60);
     const sec = Math.floor(seconds % 60).toString().padStart(2, "0");
     return `${min}:${sec}`;
   }
 }
-
-// import { useState } from "react";
-// import darkbg from "/images/darkbg.png"; // Set your background image here
-// import phone from "/images/darkphone.png"; // Phone mockup PNG (uploaded)
-
-// export default function App() {
-//   const [playing, setPlaying] = useState(true);
-
-//   return (
-//     <div
-//       className="relative w-screen h-screen bg-cover bf-fixed bg-center flex items-center justify-center"
-//       style={{ backgroundImage: `url(${darkbg})` }}
-//     >
-//       <img
-//         src={phone}
-//         alt="phone mockup"
-//         className="absolute w-[300px] sm:w-[360px] md:w-[400px] drop-shadow-2xl"
-//       />
-
-//       {/* Widgets */}
-//       <div className="absolute w-[260px] sm:w-[300px] md:w-[340px] px-4 pt-6 pb-2 bg-white/10 backdrop-blur-xl rounded-3xl shadow-lg top-[90px]">
-//         <div className="flex flex-col items-center">
-//           <img
-//             src="https://upload.wikimedia.org/wikipedia/en/e/e4/Twice_-_With_You-th_%28digital_album%29.png"
-//             alt="DIVE - TWICE"
-//             className="w-32 rounded-xl mb-2"
-//           />
-//           <div className="text-white text-sm font-semibold">DIVE</div>
-//           <div className="text-gray-300 text-xs mb-2">TWICE</div>
-//           <div className="w-full h-1 bg-gray-400 rounded-full overflow-hidden mb-1">
-//             <div className="h-full bg-white w-1/2"></div>
-//           </div>
-//           <div className="flex justify-between text-[10px] text-gray-300 w-full mb-2">
-//             <span>1:38</span>
-//             <span>3:21</span>
-//           </div>
-//           <div className="flex items-center justify-center gap-4">
-//             <button className="text-white">⏮️</button>
-//             <button
-//               className="text-white text-xl"
-//               onClick={() => setPlaying(!playing)}
-//             >
-//               {playing ? "⏸️" : "▶️"}
-//             </button>
-//             <button className="text-white">⏭️</button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Bottom Navigation */}
-//       <div className="absolute bottom-6 flex justify-center gap-3 w-full px-4">
-//         {Array.from({ length: 5 }).map((_, index) => (
-//           <button
-//             key={index}
-//             className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-md"
-//           ></button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
